@@ -1,12 +1,18 @@
-import streamlit as st
-import pandas as pd
-from PIL import Image
-from googletrans import Translator
+from deep_translator import GoogleTranslator
 from textblob import TextBlob
-from streamlit_lottie import st_lottie
-import json
-import os
+import streamlit as st
 
+def analizar_sentimiento(texto):
+    try:
+        # Traduce de forma estable de español a inglés
+        texto_traducido = GoogleTranslator(source='es', target='en').translate(texto)
+        blob = TextBlob(texto_traducido)
+        pol = round(blob.sentiment.polarity, 2)
+        sub = round(blob.sentiment.subjectivity, 2)
+        return pol, sub
+    except Exception as e:
+        st.error(f"Error al traducir o analizar: {e}")
+        return 0.0, 0.0
 # ─────────────────────────────────────────────
 # CONFIGURACIÓN DE PÁGINA
 # ─────────────────────────────────────────────
