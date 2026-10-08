@@ -28,7 +28,7 @@ with st.sidebar:
     Va de 0 (hechos objetivos) a 1 (opinión personal o estado emocional profundo).
     """) 
     st.divider()
-    st.markdown("💡 **Tip para practicar:** Intenta usar adjetivos como *joyful, overwhelmed, calm, grateful, anxious, hopeful* para ver cómo cambia la polaridad.")
+    st.markdown("💡 **Tip para practicar:** Intenta usar adjetivos como *joyful (alegre), overwhelmed (sobresaturado), calm (calmado), grateful (agradecido), anxious (ansioso), hopeful (esperanzado)* para ver cómo cambia la polaridad.")
 
 # --- Espacio de Reflexión y Análisis ---
 with st.expander('✍️ Write your entry in English / Escribir entrada'):
