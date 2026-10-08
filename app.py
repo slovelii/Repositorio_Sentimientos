@@ -2,12 +2,11 @@ from textblob import TextBlob
 import pandas as pd
 import streamlit as st
 from PIL import Image
-from googletrans import Translator
 from streamlit_lottie import st_lottie
 import json
 
-# --- Título y Encabezado con Enfoque de Acompañamiento ---
-st.title('🌱 Terapeuta y Acompañante Emocional Virtual')
+# --- Título y Encabezado con Enfoque Dual: Bienestar e Inglés ---
+st.title('🌱 Acompañante Emocional & English Journaling')
 
 try:
     image = Image.open('caritas.jpg')
@@ -15,79 +14,88 @@ try:
 except Exception:
     pass
 
-st.subheader("Por favor escribe en el campo de texto lo que estás sintiendo o la situación que deseas expresar:")
+st.subheader("Express your feelings in English / Expresa tus sentimientos en inglés:")
+st.caption("Práctica redactar tus pensamientos directamente en inglés para ejercitar el idioma mientras reflexionas sobre tu estado emocional.")
 
-translator = Translator()
-
-# --- Barra Lateral Explicativa ---
+# --- Barra Lateral Explicativa (Bilingüe) ---
 with st.sidebar:
-    st.subheader("🌿 Indicadores de Salud Emocional")
+    st.subheader("🌿 Indicadores Emocionales / Metrics")
     ("""
-    Polaridad: Mide la carga afectiva de tus palabras. 
-    Su valor oscila entre -1 (malestar o emoción negativa) y 1 (bienestar o emoción positiva), con 0 representando neutralidad o calma.
+    **Polarity (Polaridad):** Mide la carga afectiva de tus palabras en inglés. 
+    Oscila entre -1 (emoción negativa/malestar) y 1 (emoción positiva/bienestar).
     
-    Subjetividad: Mide qué tan personal es la experiencia (opiniones, emociones internas) frente a hechos objetivos. 
-    Va de 0 (objetivo) a 1 (profundamente subjetivo o vivencial).
+    **Subjectivity (Subjetividad):** Mide qué tan personal es la experiencia.
+    Va de 0 (hechos objetivos) a 1 (opinión personal o estado emocional profundo).
     """) 
+    st.divider()
+    st.markdown("💡 **Tip para practicar:** Intenta usar adjetivos como *joyful, overwhelmed, calm, grateful, anxious, hopeful* para ver cómo cambia la polaridad.")
 
 # --- Espacio de Reflexión y Análisis ---
-with st.expander('Expresar y analizar mi pensamiento'):
-    text = st.text_input('Escribe por favor: ')
+with st.expander('✍️ Write your entry in English / Escribir entrada'):
+    text = st.text_input('Type here in English (ej. "I feel very proud and happy today"): ')
+    
     if text:
-
-        translation = translator.translate(text, src="es", dest="en")
-        trans_text = translation.text
-        blob = TextBlob(trans_text)
+        # Evalúa directamente el texto en inglés
+        blob = TextBlob(text)
         
-        st.write('Polaridad Emocional: ', round(blob.sentiment.polarity,2))
-        st.write('Carga Subjetiva: ', round(blob.sentiment.subjectivity,2))
+        st.write('Polaridad Emocional (Polarity): ', round(blob.sentiment.polarity, 2))
+        st.write('Carga Subjetiva (Subjectivity): ', round(blob.sentiment.subjectivity, 2))
         
-        x = round(blob.sentiment.polarity,2)
+        x = round(blob.sentiment.polarity, 2)
         
         # --- Caso 1: Emoción Positiva ---
         if x > 0.1 and x <= 1.0:
-            st.write('Es un sentimiento Positivo 😊')
+            st.write('Es un sentimiento Positivo 😊 / Positive Sentiment')
             
-            # Guía narrativa para mantener el bienestar
-            st.success("### 💡 Formas de cultivar y sostener este sentimiento:")
+            st.success("### 💡 Formas de cultivar este bienestar / Keep the mood:")
             st.markdown("""
-            * **Práctica de Gratitud:** Registra mentalmente o en libreta qué detalle específico generó esta alegría.
-            * **Anclaje Sensorial:** Tómate 30 segundos para notar la serenidad o energía en tu cuerpo.
-            * **Compartir:** Considera enviarle un mensaje a un ser querido expresando tu bienestar.
+            * **Practice Gratitude:** Write down 2 things that made you smile today.
+            * **Useful Vocabulary:** *grateful, energized, accomplished, delighted, peaceful*.
+            * **Sharing:** Send a message in English to a friend: *"I'm having a great day and wanted to share some good energy with you!"*
             """)
             
-            with open("Feliz.json") as source:
-                animation = json.load(source)
-            st.lottie(animation, width=350)
+            try:
+                with open("Feliz.json") as source:
+                    animation = json.load(source)
+                st.lottie(animation, width=350)
+            except Exception:
+                pass
             
         # --- Caso 2: Emoción Negativa ---
         elif x >= -1 and x <= -0.1:
-            st.write('Es un sentimiento Negativo 😔')
+            st.write('Es un sentimiento Negativo 😔 / Negative Sentiment')
             
-            # Guía narrativa para validar la emoción y pedir ayuda
-            st.warning("### 🤝 Formas de gestionar el malestar y pedir ayuda:")
+            st.warning("### 🤝 Gestión emocional y frases para pedir ayuda / Support & Phrases:")
             st.markdown("""
-            * **Validación:** Es completamente normal y válido sentirse así; no intentes forzarte a cambiar la emoción de inmediato.
-            * **Pausa de Respiración:** Realiza 3 respiraciones profundas inhalando en 4 segundos y exhalando en 6.
-            * **Plantilla para pedir ayuda:** *"Hola [Nombre], hoy no me he sentido muy bien emocionalmente. ¿Tendrás tiempo de conversar un momento o acompañarme a caminar?"*
-            * **Paso Pequeño:** Elige una sola acción diminuta de autocuidado (beber agua, descansar la vista, estirarte).
+            * **Validation:** It's completely okay to feel this way. Be kind to yourself today.
+            * **Breathing Pause:** Take 3 slow, deep breaths.
+            * **Phrases to ask for help in English:**
+                * *"I've been feeling a bit overwhelmed lately, do you have time to talk?"*
+                * *"I'm having a rough day and could use some support."*
+            * **Useful Vocabulary:** *exhausted, anxious, upset, blue, struggling*.
             """)
             
-            with open("Sad Face.json") as source:
-                animation = json.load(source)
-            st.lottie(animation, width=350)
+            try:
+                with open("Sad Face.json") as source:
+                    animation = json.load(source)
+                st.lottie(animation, width=350)
+            except Exception:
+                pass
             
         # --- Caso 3: Emoción Neutral ---
         else:
-            st.write('Es un sentimiento Neutral 😐')
+            st.write('Es un sentimiento Neutral 😐 / Neutral Sentiment')
             
-            # Guía narrativa para la exploración interior
-            st.info("### 🧘 Preguntas de autoexploración:")
+            st.info("### 🧘 Preguntas de autoexploración / Self-Reflection:")
             st.markdown("""
-            * **Chequeo Corporal:** ¿Sientes esta neutralidad como paz y equilibrio, o como cansancio/apatía?
-            * **Atención Plena:** ¿Qué necesita tu mente o tu cuerpo en este momento preciso para sentirse cómodo?
+            * **Body Check:** Are you feeling calm or just tired?
+            * **Journaling Prompt:** Try adding more detail to your sentence. How does your body feel right now?
+            * **Useful Vocabulary:** *balanced, neutral, relaxed, indifferent, quiet*.
             """)
             
-            with open("Neutral face.json") as source:
-                animation = json.load(source)
-            st.lottie(animation, width=350)
+            try:
+                with open("Neutral face.json") as source:
+                    animation = json.load(source)
+                st.lottie(animation, width=350)
+            except Exception:
+                pass
